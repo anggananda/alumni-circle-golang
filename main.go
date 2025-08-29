@@ -8,7 +8,25 @@ import (
 	"alumni-circle-api/services"
 
 	"github.com/gin-gonic/gin"
+  "github.com/swaggo/files"
+	"github.com/swaggo/gin-swagger"
+	_ "alumni-circle-api/docs"
 )
+
+// @title Alumni Circle API
+// @version 1.0
+// @description API untuk aplikasi Alumni Circle
+// @termsOfService http://swagger.io/terms/
+
+// @contact.name Dwi Angga
+// @contact.url http://github.com/username
+// @contact.email angga@example.com
+
+// @license.name MIT
+// @license.url https://opensource.org/licenses/MIT
+
+// @host localhost:8080
+// @BasePath /api/v1
 
 func main() {
 	router := gin.Default()
@@ -27,6 +45,8 @@ func main() {
 	discussionHandler := handlers.NewDiscussionHandler(discussionService)
 
 	routes.SetUpRoutes(router, alumniHandler, eventHandler, discussionHandler)
+  router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+
 
 	router.Run(":8080")
 }

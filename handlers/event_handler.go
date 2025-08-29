@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"alumni-circle-api/models"
 	"alumni-circle-api/services"
 	"alumni-circle-api/utils"
 	"context"
@@ -10,6 +11,17 @@ import (
 
 	"github.com/gin-gonic/gin"
 )
+
+type EventListResponse struct {
+	Datas   []models.Event `json:"datas"`
+	IsNext  bool           `json:"is_next"`
+	Message string         `json:"message"`
+}
+
+type EventSingleResponse struct {
+	Datas   models.Event `json:"datas"`
+	Message string       `json:"message"`
+}
 
 type EventHandler struct {
 	EventService *services.EventService
@@ -21,6 +33,17 @@ func NewEventHandler(service *services.EventService) *EventHandler {
 	}
 }
 
+// GetAllEvent godoc
+// @Summary List Event
+// @Description Mendapatkan semua event dengan pagination dan optional search
+// @Tags event
+// @Accept  json
+// @Produce  json
+// @Param page query int false "Page number"
+// @Param search query string false "Search keyword"
+// @Success 200 {object} EventListResponse
+// @Failure 400 {object} map[string]string
+// @Router /private/event [get]
 func (h *EventHandler) GetAllEvent(c *gin.Context) {
 	pageStr := c.DefaultQuery("page", "1")
 	search := c.DefaultQuery("search", "")
@@ -50,6 +73,17 @@ func (h *EventHandler) GetAllEvent(c *gin.Context) {
 	})
 }
 
+// GetEventByCategory godoc
+// @Summary List Event By Category
+// @Description Mendapatkan semua event berdasarkan kategori event dengan pagination dan optional search
+// @Tags event
+// @Accept  json
+// @Produce  json
+// @Param page query int false "Page number"
+// @Param search query string false "Search keyword"
+// @Success 200 {object} EventListResponse
+// @Failure 400 {object} map[string]string
+// @Router /private/event/category/:idCategory [get]
 func (h *EventHandler) GetEventByCategory(c *gin.Context) {
 	idkategori, err := utils.StringToInt64(c.Param("idKategori"))
 	if err != nil {
@@ -69,6 +103,15 @@ func (h *EventHandler) GetEventByCategory(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"datas": event, "message": "OK"})
 }
 
+// GetEventByID godoc
+// @Summary List Event By ID
+// @Description Mendapatkan semua event berdasarkan id event
+// @Tags event
+// @Accept  json
+// @Produce  json
+// @Success 200 {object} EventSingleResponse
+// @Failure 400 {object} map[string]string
+// @Router /private/event/:idEvent [get]
 func (h *EventHandler) GetEventByID(c *gin.Context) {
 	idEvent, err := utils.StringToInt64(c.Param("idEvent"))
 	if err != nil {

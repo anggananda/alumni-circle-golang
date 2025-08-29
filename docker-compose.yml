@@ -1,7 +1,7 @@
 version: "3.8"
 
 services:
-  golang-app:
+  golang-alumni-circle:
     build:
       context: .
       dockerfile: Dockerfile

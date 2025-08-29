@@ -1,0 +1,138 @@
+basePath: /api/v1
+definitions:
+  handlers.EventListResponse:
+    properties:
+      datas:
+        items:
+          $ref: '#/definitions/models.Event'
+        type: array
+      is_next:
+        type: boolean
+      message:
+        type: string
+    type: object
+  handlers.EventSingleResponse:
+    properties:
+      datas:
+        $ref: '#/definitions/models.Event'
+      message:
+        type: string
+    type: object
+  models.Event:
+    properties:
+      deskripsi:
+        type: string
+      gambar:
+        type: string
+      id_event:
+        type: integer
+      id_kategori:
+        type: integer
+      latitude:
+        type: number
+      lokasi:
+        type: string
+      longidute:
+        type: number
+      nama_event:
+        type: string
+      tanggal_event:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: angga@example.com
+    name: Dwi Angga
+    url: http://github.com/username
+  description: API untuk aplikasi Alumni Circle
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  termsOfService: http://swagger.io/terms/
+  title: Alumni Circle API
+  version: "1.0"
+paths:
+  /private/event:
+    get:
+      consumes:
+      - application/json
+      description: Mendapatkan semua event dengan pagination dan optional search
+      parameters:
+      - description: Page number
+        in: query
+        name: page
+        type: integer
+      - description: Search keyword
+        in: query
+        name: search
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handlers.EventListResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: List Event
+      tags:
+      - event
+  /private/event/:idEvent:
+    get:
+      consumes:
+      - application/json
+      description: Mendapatkan semua event berdasarkan id event
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handlers.EventSingleResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: List Event By ID
+      tags:
+      - event
+  /private/event/category/:idCategory:
+    get:
+      consumes:
+      - application/json
+      description: Mendapatkan semua event berdasarkan kategori event dengan pagination
+        dan optional search
+      parameters:
+      - description: Page number
+        in: query
+        name: page
+        type: integer
+      - description: Search keyword
+        in: query
+        name: search
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handlers.EventListResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: List Event By Category
+      tags:
+      - event
+swagger: "2.0"
